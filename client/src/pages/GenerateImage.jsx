@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-
+import axios from 'axios'
 const GenerateImage = () => {
     const [imageSrc, setImageSrc] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -24,27 +24,12 @@ const GenerateImage = () => {
         setError("");
 
         try {
-            const response = await fetch("https://clipdrop-api.co/text-to-image/v1", {
-                method: "POST",
-                headers: {
-                    "x-api-key": import.meta.env.VITE_CLIPDROP_API_KEY,
-                },
-                body: form,
-            });
-
-            if (!response.ok) {
-                const errorData = await response.json();
-                throw new Error(errorData?.error || "Image generation failed.");
+            const data  = await axios.post(`${import.meta.env.VITE_API_URL}/generate-image`, {prompt});
+            console.log(data);
+            if(!data?.statusText) {
+                throw new Error("FAILED")
             }
-
-            const buffer = await response.arrayBuffer();
-            const blob = new Blob([buffer], { type: "image/png" });
-            const url = URL.createObjectURL(blob);
-
-            setImageSrc((oldUrl) => {
-                if (oldUrl) URL.revokeObjectURL(oldUrl);
-                return url;
-            });
+            setImageSrc(data?.data?.url)
         } catch (err) {
             console.error(err);
             setError(err.message || "Something went wrong.");
