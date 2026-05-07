@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import PageTitle from "../components/shared/PageTitle";
 import { AuthContext } from "../provider/AuthProvider";
 import Swal from "sweetalert2";
 import axios from "axios";
+import PageTitle from "../components/PageTitle";
 
 const Create = () => {
     const { user, login } = useContext(AuthContext);
