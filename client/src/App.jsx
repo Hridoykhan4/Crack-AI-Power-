@@ -9,6 +9,9 @@ const App = () => {
     <>
       {user && user?.email && (
         <Marquee
+
+
+        
           pauseOnHover={true}
           gradient={true}
           className="bg-primary text-base-100"
