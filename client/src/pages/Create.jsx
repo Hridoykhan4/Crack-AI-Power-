@@ -59,10 +59,7 @@ const Create = () => {
             Swal.fire("Write a Prompt", "Write a prompt in the input", "error");
             return false;
         }
-        if (!prompt) {
-            Swal.fire("Write a Prompt", "Write a prompt in the input", "error");
-            return false;
-        }
+
         if (prompt.trim().length < 20) {
             Swal.fire(
                 "Invalid Prompt",
@@ -75,6 +72,30 @@ const Create = () => {
         return true;
     };
 
+    const fetchBuffer = async (prompt) => {
+        const formData = new FormData();
+        formData.append("prompt", prompt);
+
+       
+        const { data } = await axios.post(
+            "https://clipdrop-api.co/text-to-image/v1",
+            formData,
+            {
+                headers: { "x-api-key": import.meta.env.VITE_CLIPDROP_API_KEY },
+                responseType: "arraybuffer",
+            }
+        );
+        return data;
+    };
+
+    const generateImageURL = async buffer => {
+        const formData = new FormData()
+        formData.append('image', new Blob([buffer], { type: 'image/jpeg' }))
+        const { data } = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`, formData);
+        console.log(data);
+        return data;
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         const form = e.target;
@@ -84,20 +105,24 @@ const Create = () => {
         if (!checkUser()) return;
         if (!validate(prompt, category)) return;
 
-        console.log({ prompt, category });
-        axios
-            .post("http://localhost:5000/api/v1/image/create", {
-                email: user?.email,
-                prompt,
-                category,
-                username: user?.displayName || "Anonymus",
-                userImg:
-                    user?.photoURL ||
-                    "https://img.icons8.com/?size=96&id=z-JBA_KtSkxG&format=png",
-            })
-            .then((res) => {
-                console.log(res.data);
-            });
+
+        const buffer = await fetchBuffer(prompt)
+        const imageURL = await generateImageURL(buffer)
+        console.log(imageURL);
+        // console.log({ prompt, category });
+        // axios
+        //     .post("http://localhost:5000/api/v1/image/create", {
+        //         email: user?.email,
+        //         prompt,
+        //         category,
+        //         username: user?.displayName || "Anonymus",
+        //         userImg:
+        //             user?.photoURL ||
+        //             "https://img.icons8.com/?size=96&id=z-JBA_KtSkxG&format=png",
+        //     })
+        //     .then((res) => {
+        //         console.log(res.data);
+        //     });
 
         // const blob = new Blob([buffer], { type: "image/jpeg" }); // Set correct MIME type
         // const url = URL.createObjectURL(blob);
