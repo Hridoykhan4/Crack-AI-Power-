@@ -27,8 +27,10 @@ const App = () => {
           <Navbar />
         </nav>
       </header>
+  
 
       <Outlet />
+  
     </>
   );
 };

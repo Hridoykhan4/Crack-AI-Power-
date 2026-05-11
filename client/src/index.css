@@ -1,2 +1,13 @@
 @import "tailwindcss";
 @plugin "../node_modules/daisyui/index.js";
+
+
+@plugin "daisyui/theme" {
+  name: "light";
+  default: true;
+  --color-primary: #149b9b;
+}
+
+a.active {
+  @apply bg-[#149b9b] text-white;
+}

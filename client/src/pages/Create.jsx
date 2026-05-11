@@ -72,43 +72,56 @@ const Create = () => {
         return true;
     };
 
-    const fetchBuffer = async (prompt) => {
-        const formData = new FormData();
-        formData.append("prompt", prompt);
+    // const fetchBuffer = async (prompt) => {
+    //     const formData = new FormData();
+    //     formData.append("prompt", prompt);
 
-       
-        const { data } = await axios.post(
-            "https://clipdrop-api.co/text-to-image/v1",
-            formData,
-            {
-                headers: { "x-api-key": import.meta.env.VITE_CLIPDROP_API_KEY },
-                responseType: "arraybuffer",
-            }
-        );
-        return data;
-    };
 
-    const generateImageURL = async buffer => {
-        const formData = new FormData()
-        formData.append('image', new Blob([buffer], { type: 'image/jpeg' }))
-        const { data } = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`, formData);
-        console.log(data);
-        return data;
-    }
+    //     const { data } = await axios.post(
+    //         "https://clipdrop-api.co/text-to-image/v1",
+    //         formData,
+    //         {
+    //             headers: { "x-api-key": import.meta.env.VITE_CLIPDROP_API_KEY },
+    //             responseType: "arraybuffer",
+    //         }
+    //     );
+    //     return data;
+    // };
+
+    // const generateImageURL = async (buffer, prompt) => {
+    //     const formData = new FormData()
+    //     const fileName = `${prompt.slice(0,   10).replace(/\s/g, '_')}.jpg`;
+    //     formData.append('image', new Blob([buffer], { type: 'image/jpeg' }), fileName)
+    //     const { data } = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`, formData);
+    //     return data;
+    // }
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         const form = e.target;
         const prompt = form.prompt.value;
         const category = form.category.value;
+        if (!checkUser) return;
+        if (!validate(prompt, category)) return
+        const {data} = await axios.post(`${import.meta.env.VITE_API_URL}/images/create`, {
+            email: user?.email,
+            prompt,
+            category,
+            username: user?.displayName,
+            userImg: user?.photoURL,
+        })
 
-        if (!checkUser()) return;
-        if (!validate(prompt, category)) return;
+        console.log(data.url);
 
 
-        const buffer = await fetchBuffer(prompt)
-        const imageURL = await generateImageURL(buffer)
-        console.log(imageURL);
+
+        // if (!checkUser()) return;
+        // if (!validate(prompt, category)) return;
+
+
+        // const buffer = await fetchBuffer(prompt)
+        // const {data} = await generateImageURL(buffer, prompt)
+        // console.log(data?.url);
         // console.log({ prompt, category });
         // axios
         //     .post("http://localhost:5000/api/v1/image/create", {

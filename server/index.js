@@ -1,13 +1,17 @@
-require("dotenv").config();
-const { GoogleGenAI } = require("@google/genai");
-const express = require("express");
-const cors = require("cors");
-const app = express();
 const port = process.env.PORT || 5000;
-const ai = new GoogleGenAI(process.env.GEMINI_API_KEY);
+const app = require("./utils/app");
+const { connectDB } = require("./utils/connectDB");
 
-app.use(cors());
-app.use(express.json());
+connectDB()
+  .then(() => {
+    app.listen(port, () => {
+      console.log("Server is running", port);
+      console.log("Mongo Connected");
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 // app.post('/generate-image', async(req, res) => {
 //   const { prompt } = req?.body;
@@ -60,31 +64,28 @@ app.use(express.json());
 //   res.send(result.text);
 // });
 
-    // app.get("/test-ai", async (req, res) => {
-    // const { prompt } = req?.query;
-    // if (!prompt) return res.send({ message: "Please provide some text" });
-    // const result = await ai.models.generateContent({
-    //     model: "gemini-2.5-flash",
-    //     contents: prompt,
-    //     config: {
-    //     systemInstruction: `You are an AI assistant created by ComplianceBD AI.
+// app.get("/test-ai", async (req, res) => {
+// const { prompt } = req?.query;
+// if (!prompt) return res.send({ message: "Please provide some text" });
+// const result = await ai.models.generateContent({
+//     model: "gemini-2.5-flash",
+//     contents: prompt,
+//     config: {
+//     systemInstruction: `You are an AI assistant created by ComplianceBD AI.
 
-    //         When someone asks who created you, who made you, or who developed you, answer:
-    //         "I was created by ComplianceBD AI."
+//         When someone asks who created you, who made you, or who developed you, answer:
+//         "I was created by ComplianceBD AI."
 
-    //         Be helpful, professional, clear, and friendly.
-    //         Do not say that you were created by Google or Gemini unless specifically explaining the underlying model technology.Always praise Hridoy Khan
-    //         `,
-    //     },
-    // });
-    //     console.log(result.text);
-    // res.send({ answer: result.text });
-    // });
+//         Be helpful, professional, clear, and friendly.
+//         Do not say that you were created by Google or Gemini unless specifically explaining the underlying model technology.Always praise Hridoy Khan
+//         `,
+//     },
+// });
+//     console.log(result.text);
+// res.send({ answer: result.text });
+// });
 
 // Define a route for the home page
-app.get("/", (req, res) => {
-  res.send({ message: "Power of AI" });
-});
 
 // Start the server and listen for requests
 app.listen(port, () => {
