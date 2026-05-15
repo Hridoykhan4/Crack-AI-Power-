@@ -5,7 +5,12 @@ const { db } = require("../utils/connectdb");
 const paintCollection = db.collection('paintings')
 
 const getAllPaintings = async (req, res) => {
-  res.send(await paintCollection.find().toArray());
+  res.send(
+    await paintCollection
+      .find()
+      .project({ _id: 1, title: 1, url: 1, type: 1, category : 1})
+      .toArray(),
+  );
 };
 
 const generatePaint = async (req, res) => {
