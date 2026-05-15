@@ -1,8 +1,6 @@
-const { db } = require("../../server2/utils/connectdb");
-const { generateReply } = require("../utils/ai/generateReply");
+const { db } = require("../utils/connectdb");
 
-const commentCollection = db.collection('painting-comments')
-
+const commentCollection = db.collection('paintingComments')
 const postUserComment = async (req, res) => {
   try {
     const { imageId, prompt, email, comment, username, userImg } = req.body;
@@ -14,9 +12,8 @@ const postUserComment = async (req, res) => {
       });
     }
 
-    const reply = await generateReply(prompt, comment);
+    const reply = await generateAIReply(prompt, comment);
     console.log(reply);
-
 
     const document = {
       imageId,

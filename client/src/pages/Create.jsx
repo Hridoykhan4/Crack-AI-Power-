@@ -90,7 +90,7 @@ const Create = () => {
 
     // const generateImageURL = async (buffer, prompt) => {
     //     const formData = new FormData()
-    //     const fileName = `${prompt.slice(0,   10).replace(/\s/g, '_')}.jpg`;
+    //     const fileName = `${prompt.slice(0,10).replace(/\s/g, '_')}.jpg`;
     //     formData.append('image', new Blob([buffer], { type: 'image/jpeg' }), fileName)
     //     const { data } = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`, formData);
     //     return data;

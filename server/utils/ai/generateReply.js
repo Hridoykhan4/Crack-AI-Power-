@@ -9,7 +9,7 @@ const openai = new OpenAI({
   },
 });
 
-const generateAIReply = async (prompt, comment) => {
+const generateReply = async (prompt, comment) => {
   try {
     const finalPrompt = `
 Image prompt: ${prompt}
@@ -40,4 +40,4 @@ Write a short, friendly reply to the user's comment.
   }
 };
 
-module.exports = { generateAIReply };
+module.exports = { generateReply };

@@ -5,8 +5,8 @@ const { imageCollection } = require('../utils/connectDB')
 
 const imageRouter = express.Router()
 
-imageRouter.post('/create', insertAiImage)
 imageRouter.get('/all', getAllImage)
 imageRouter.get('/:id', getSingleImage)
+imageRouter.post('/create', insertAiImage)
 
 module.exports = {imageRouter}

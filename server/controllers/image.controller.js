@@ -18,7 +18,7 @@ const insertAiImage = async (req, res) => {
   try {
     const buffer = await getImageBuffer(prompt, category);
     const data = await generateImageURl(buffer, prompt);
-    console.log(data);
+    // console.log(data);
 
     const document = {
         email,
