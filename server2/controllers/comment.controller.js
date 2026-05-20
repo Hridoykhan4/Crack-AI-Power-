@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const { db } = require("../utils/connectdb");
 
 const commentCollection = db.collection('paintingComments')
@@ -44,4 +45,13 @@ const postUserComment = async (req, res) => {
   }
 };
 
-module.exports = { postUserComment };
+
+const getComments = async(req, res) => {
+  res.send(await commentCollection.find().toArray())
+}
+
+const getSingleComments = async(req, res ) => {
+  res.send(await commentCollection.findOne({_id: new ObjectId(req.params.id)}))
+}
+
+module.exports = { postUserComment , getSingleComments};
